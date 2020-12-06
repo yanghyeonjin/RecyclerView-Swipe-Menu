@@ -3,6 +3,7 @@ package com.example.recyclerviewswipemenu
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerviewswipemenu.databinding.ActivityMainBinding
 import java.io.BufferedReader
@@ -63,6 +64,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
+        val swipeController = SwipeController()
+        val itemTouchHelper = ItemTouchHelper(swipeController)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)

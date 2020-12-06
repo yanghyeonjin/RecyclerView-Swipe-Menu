@@ -1,14 +1,22 @@
 package com.example.recyclerviewswipemenu
 
+import android.graphics.Canvas
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.recyclerviewswipemenu.databinding.ActivityMainBinding
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+
+/**
+ * https://codeburst.io/android-swipe-menu-with-recyclerview-8f28a235ff28
+ */
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -64,7 +72,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val swipeController = SwipeController()
+        val swipeController = SwipeController(object : SwipeControllerActions() {
+            override fun onLeftClicked(position: Int) {
+                super.onLeftClicked(position)
+            }
+
+            override fun onRightClicked(position: Int) {
+                playersAdapter.removeItem(position)
+            }
+        })
         val itemTouchHelper = ItemTouchHelper(swipeController)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
@@ -72,6 +88,12 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
             adapter = playersAdapter
+
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+                override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+                    swipeController.onDraw(c)
+                }
+            })
         }
     }
 }

@@ -27,4 +27,10 @@ class PlayersAdapter : RecyclerView.Adapter<PlayerViewHolder>() {
         this.players = list
         notifyDataSetChanged()
     }
+
+    fun removeItem(position: Int) {
+        this.players.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, itemCount)
+    }
 }
